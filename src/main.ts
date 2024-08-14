@@ -10,13 +10,16 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('OLX API')
-    .setDescription('OLX API docs')
+    .setDescription(`
+    Main parts of OLX API's backend \n 
+    For any questions: bek5056@gmail.com
+    `)
     .setVersion('1.0.0')
     .addTag('olx')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('rent', app, document);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}'s port.`)
