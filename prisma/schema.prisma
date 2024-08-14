@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id               String          @id @default(uuid())
+  fullName         String
+  email            String          @unique
+  phoneNumber      String          @unique
+  password         String
+  avatarUrl        String
+  role             String
+  isActive         Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  otps             otps[]
+  refreshtokens    refreshtokens[]
+  reviews          reviews[]
+  favorites        favorites[]
+  products         products[]
+  sentMessages     messages[]      @relation("SenderMessages")
+  receivedMessages messages[]      @relation("ReceiverMessages")
+}
+
+model categories {
+  id          String     @id @default(uuid())
+  name        String
+  description String
+  parentId    String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  products    products[]
+}
+
+model products {
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  category    categories  @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  user        users       @relation(fields: [userId], references: [id])
+  userId      String
+  adress      String
+  images      String[]
+  status      String      @default("pending")
+  createdAt   DateTime    @default(now())
+  updatedAtt  DateTime    @updatedAt
+  favorites   favorites[]
+  messages    messages[]
+  reviews     reviews[]
+}
+
+model favorites {
+  id        String   @id @default(uuid())
+  user      users    @relation(fields: [userId], references: [id])
+  userId    String
+  product   products @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime @default(now())
+}
+
+model messages {
+  id         String   @id @default(uuid())
+  sender     users    @relation("SenderMessages", fields: [senderId], references: [id])
+  senderId   String
+  receiver   users    @relation("ReceiverMessages", fields: [receiverId], references: [id])
+  receiverId String
+  product    products @relation(fields: [productId], references: [id])
+  productId  String
+  content    String
+  createdAt  DateTime @default(now())
+}
+
+model reviews {
+  id        String   @id @default(uuid())
+  user      users    @relation(fields: [userId], references: [id])
+  userId    String
+  product   products @relation(fields: [productId], references: [id])
+  productId String
+  rating    String
+  comment   String
+  createdAt DateTime @default(now())
+}
+
+model otps {
+  id        String   @id @default(uuid())
+  otp       String
+  user      users    @relation(fields: [userId], references: [id])
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model refreshtokens {
+  id        String   @id @default(uuid())
+  token     String
+  user      users    @relation(fields: [userId], references: [id])
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
