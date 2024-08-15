@@ -1,9 +1,14 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/users/common/guards/role.guard';
+import { Roles } from 'src/users/common/guards/roles.decorator';
+import { JwtAuthGuard } from 'src/users/common/jwt/jwt-guard';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles("admin", "user")
 @ApiTags("Messages")
 @Controller('messages')
 export class MessagesController {

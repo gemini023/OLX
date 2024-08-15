@@ -1,9 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/users/common/guards/role.guard';
+import { Roles } from 'src/users/common/guards/roles.decorator';
+import { JwtAuthGuard } from 'src/users/common/jwt/jwt-guard';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles("admin")
 @ApiTags("Categories")
 @Controller('categories')
 export class CategoriesController {

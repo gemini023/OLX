@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRoles } from '@prisma/client';
 import { IsString, IsEmail, IsNotEmpty, MinLength, IsOptional, Length, IsBoolean } from 'class-validator';
 
 export class SignUpDto {
@@ -29,7 +30,7 @@ export class SignUpDto {
 
     @IsString()
     @IsOptional()
-    role?: string;
+    role?: UserRoles;
 
     @IsBoolean()
     isActive: boolean = false

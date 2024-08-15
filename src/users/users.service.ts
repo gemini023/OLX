@@ -125,7 +125,7 @@ export class UsersService {
       throw new UnauthorizedException("Invalid email or password!")
     }
 
-    const payload = { email: user.email, sub: user.id }
+    const payload = { email: user.email, sub: user.id, role : user.role }
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_ACCESS_SECRET,
       expiresIn: process.env.JWT_EXPIRES_IN

@@ -14,6 +14,8 @@ async function bootstrap() {
     Main parts of OLX API's backend \n 
     For any questions: bek5056@gmail.com
     `)
+    .addBearerAuth()
+    .addSecurityRequirements('bearer')
     .setVersion('1.0.0')
     .addTag('olx')
     .build();
